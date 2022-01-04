@@ -10,6 +10,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import { Header } from '..';
+import { Menu } from "@material-ui/icons";
+import { IconButton } from "@material-ui/core";
 
 const useStyles = makeStyles({
   list: {
@@ -67,6 +70,17 @@ export default function TemporaryDrawer() {
     <div>
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
+          <Header>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              arial-label="menu"
+              onClick={toggleDrawer(anchor, true)}
+            >
+              <Menu />
+            </IconButton>
+          </Header>
           <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
           <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
             {list(anchor)}
