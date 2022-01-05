@@ -22,7 +22,7 @@ const CreateClass = () => {
         onClose={() => setCreateClassDialog(false)}
         aria-labelledby="customized-dialog-title"
         open={createClassDialog}
-        maxWidth="xs"
+        maxWidth={showForm ? 'lg' : 'xs'}
       >
         {showForm ? (
           <Form />
