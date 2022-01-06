@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import { Add, Apps } from "@material-ui/icons";
 import React from "react";
-import CreateClass from "../CreateClass/CreateClass";
+import {CreateClass, JoinClass} from "..";
 import { useStyles } from "./styles";
 import { useLocalContext } from '../../context/context';
 
@@ -25,11 +25,16 @@ const Header = ({ children }) => {
     setAnchorEl(null);
   };
 
-  const { createClassDialog, setCreateClassDialog } = useLocalContext();
+  const { setCreateClassDialog, setJoinClassDialog } = useLocalContext();
 
   const handleCreateDialog = () => {
     handleClose();
     setCreateClassDialog(true);
+  }
+
+  const handleJoinDialog = () => {
+    handleClose();
+    setJoinClassDialog(true);
   }
 
   return (
@@ -56,7 +61,7 @@ const Header = ({ children }) => {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-                <MenuItem>Join class</MenuItem>
+                <MenuItem onClick={handleJoinDialog}>Join class</MenuItem>
                 <MenuItem onClick={handleCreateDialog}>Create class</MenuItem>
             </Menu>
             <div>
@@ -66,6 +71,7 @@ const Header = ({ children }) => {
         </Toolbar>
       </AppBar>
       <CreateClass />
+      <JoinClass />
     </div>
   );
 };
