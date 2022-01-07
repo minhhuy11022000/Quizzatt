@@ -13,13 +13,13 @@ export function ContextProvider({ children }) {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [loggedInMail, setLoggedInMail] = useState(null);
 
-  const login = () => {
-    auth.signInWithPopup(provider);
-  };
+  const login = () => auth.signInWithPopup(provider);
+
+  const logout = () => auth.signOut();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      if(authUser) {
+      if (authUser) {
         setLoggedInMail(authUser.email);
         setLoggedInUser(authUser);
       } else {
@@ -28,9 +28,7 @@ export function ContextProvider({ children }) {
       }
     });
 
-    return () => {
-      unsubscribe();
-    }
+    return () => unsubscribe();
   }, []);
 
   const value = {
@@ -38,7 +36,10 @@ export function ContextProvider({ children }) {
     setCreateClassDialog,
     joinClassDialog,
     setJoinClassDialog,
-    login
+    login,
+    logout,
+    loggedInMail,
+    loggedInUser,
   };
   return <AddContext.Provider value={value}>{children}</AddContext.Provider>;
 }

@@ -9,7 +9,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const JoinClass = () => {
-  const { joinClassDialog, setJoinClassDialog } = useLocalContext();
+  const { joinClassDialog, setJoinClassDialog, loggedInUser } = useLocalContext();
   return (
     <div>
       <Dialog
@@ -37,14 +37,14 @@ const JoinClass = () => {
           </div>
           <div className="joinClass__form">
             <p className="joinClass__formText">
-              You're currently signed in as Logged in email
+              You're currently signed in as Logged in as {loggedInUser?.email}
             </p>
             <div className="joinClass__loginInfo">
               <div className="joinClass__classLeft">
-                <Avatar />
+                <Avatar src={loggedInUser?.photoURL} />
                 <div className="joinClass__loginText">
-                  <div className="joinClass__loginName">Pulkit</div>
-                  <div className="joinClass__loginEmail">Mail</div>
+                  <div className="joinClass__loginName">{loggedInUser?.displayName}</div>
+                  <div className="joinClass__loginEmail">{loggedInUser?.email}</div>
                 </div>
               </div>
               <Button variant="outlined" color="primary">
