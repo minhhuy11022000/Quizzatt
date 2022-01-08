@@ -3,13 +3,54 @@ import { Avatar, Button, Dialog, Slide, TextField } from "@material-ui/core";
 import { useLocalContext } from "../../context/context";
 import { Close } from "@material-ui/icons";
 import "./styles.css";
+import db from "../../lib/firebase";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const JoinClass = () => {
-  const { joinClassDialog, setJoinClassDialog, loggedInUser } = useLocalContext();
+  const { joinClassDialog, setJoinClassDialog, loggedInUser } =
+    useLocalContext();
+
+    const [classCode, setClassCode] = useState('');
+    const [email, setEmail] = useState('');
+    const [error, setError] = useState('');
+    const [joinedData, setJoinedData] = useState();
+    const [classExists, setClassExists] = useState(false);
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+
+      db.collection('CreatedClasses')
+      .doc(email)
+      .collection('classes')
+      .doc(classCode)
+      .get().then((doc) => {
+        if(doc.exists && doc.owner !== loggedInUser.email){
+          setClassExists(true);
+          setJoinedData(doc.data());
+          setError(false);
+        } else {
+          setError(true);
+          setClassExists(false);
+          return 
+        }
+      })
+
+      if (classExists === true) {
+        db.collection('JoinedClasses')
+        .doc(loggedInUser.email)
+        .collection('classes')
+        .doc(classCode)
+        .set({
+          joinedData
+        }).then(() => {
+          setJoinClassDialog(false);
+        })
+      }
+    }
+
   return (
     <div>
       <Dialog
@@ -31,6 +72,7 @@ const JoinClass = () => {
               className="joinClass__btn"
               variant="contained"
               color="primary"
+              onClick={handleSubmit}
             >
               Join
             </Button>
@@ -43,8 +85,12 @@ const JoinClass = () => {
               <div className="joinClass__classLeft">
                 <Avatar src={loggedInUser?.photoURL} />
                 <div className="joinClass__loginText">
-                  <div className="joinClass__loginName">{loggedInUser?.displayName}</div>
-                  <div className="joinClass__loginEmail">{loggedInUser?.email}</div>
+                  <div className="joinClass__loginName">
+                    {loggedInUser?.displayName}
+                  </div>
+                  <div className="joinClass__loginEmail">
+                    {loggedInUser?.email}
+                  </div>
                 </div>
               </div>
               <Button variant="outlined" color="primary">
@@ -67,16 +113,22 @@ const JoinClass = () => {
               Ask your lecturer for the class code, then enter it here.
             </div>
             <div className="joinClass__loginInfo">
-                <TextField 
-                    id="outlined-basic"
-                    label="Class Code"
-                    variant="outlined"
-                />
-                <TextField 
-                    id="outlined-basic"
-                    label="Student's ID"
-                    variant="outlined"
-                />
+              <TextField
+                id="outlined-basic"
+                label="Class Code"
+                variant="outlined"
+                value={classCode}
+                onChange={(e) => setClassCode(e.target.value)}
+                error={error}
+                helperText={error && "No class was found, you should check the class code again."}
+              />
+              <TextField
+                id="outlined-basic"
+                label="Student's ID"
+                variant="outlined"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
           </div>
         </div>
