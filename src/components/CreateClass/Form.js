@@ -24,7 +24,8 @@ const Form = () => {
       className: className,
       section: Section,
       room: Room,
-      subject: Subject
+      subject: Subject,
+      id: id
     }).then(() => {
       setCreateClassDialog(false);
     });

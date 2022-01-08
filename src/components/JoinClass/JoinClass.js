@@ -13,43 +13,46 @@ const JoinClass = () => {
   const { joinClassDialog, setJoinClassDialog, loggedInUser } =
     useLocalContext();
 
-    const [classCode, setClassCode] = useState('');
-    const [email, setEmail] = useState('');
-    const [error, setError] = useState('');
-    const [joinedData, setJoinedData] = useState();
-    const [classExists, setClassExists] = useState(false);
+  const [classCode, setClassCode] = useState("");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [joinedData, setJoinedData] = useState();
+  const [classExists, setClassExists] = useState(false);
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-      db.collection('CreatedClasses')
+    db.collection("CreatedClasses")
       .doc(email)
-      .collection('classes')
+      .collection("classes")
       .doc(classCode)
-      .get().then((doc) => {
-        if(doc.exists && doc.owner !== loggedInUser.email){
+      .get()
+      .then((doc) => {
+        console.log(doc.owner.email);
+        if (doc.exists && (doc.owner !== loggedInUser.email)) {
           setClassExists(true);
           setJoinedData(doc.data());
           setError(false);
         } else {
           setError(true);
           setClassExists(false);
-          return 
+          return;
         }
-      })
+      });
 
-      if (classExists === true) {
-        db.collection('JoinedClasses')
+    if (classExists === true) {
+      db.collection("JoinedClasses")
         .doc(loggedInUser.email)
-        .collection('classes')
+        .collection("classes")
         .doc(classCode)
         .set({
-          joinedData
-        }).then(() => {
-          setJoinClassDialog(false);
+          joinedData,
         })
-      }
+        .then(() => {
+          setJoinClassDialog(false);
+        });
     }
+  };
 
   return (
     <div>
@@ -120,14 +123,19 @@ const JoinClass = () => {
                 value={classCode}
                 onChange={(e) => setClassCode(e.target.value)}
                 error={error}
-                helperText={error && "No class was found, you should check the class code again."}
+                helperText={
+                  error &&
+                  "No class was found, you should check the class code again."
+                }
               />
               <TextField
                 id="outlined-basic"
-                label="Student's ID"
+                label="Onwer's email"
                 variant="outlined"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                error={error}
+                helperText={error && "No class was found"}
               />
             </div>
           </div>

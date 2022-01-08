@@ -43,17 +43,17 @@ const Header = ({ children }) => {
         <Toolbar className={classes.toolbar}>
           <div className={classes.headerWrapper}>
             {children}
-            <img
+            {/* <img
               src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg"
               alt="Classroom"
-            />
+            /> */}
             <Typography variant="h6" className={classes.title}>
               Quizzatt
             </Typography>
           </div>
           <div className={classes.header__wrapper__right}>
             <Add onClick={handleClick} className={classes.icon} />
-            <Apps className={classes.icon} />
+            {/* <Apps className={classes.icon} /> */}
             <Menu
               id="simple-menu"
               anchorEl={anchorEl}
