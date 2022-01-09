@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Drawer, JoinedClasses, Login } from "./components";
+import { Drawer, JoinedClasses, Login, Main } from "./components";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { IsUserRedirect, ProtectedRoute } from "./routes/Routes";
 import { useLocalContext } from "./context/context";
@@ -45,14 +45,13 @@ function App() {
       <Switch>
         {createdClasses.map((item, index) => (
           <Route key={index} exact path={`/${item.id}`}>
-            <h1>Hello</h1>
-            <p>{item.id}</p>
+            <Drawer />
+            <Main classData={item} />
           </Route>
         ))}
         {joinedClasses.map((item, index) => (
           <Route key={index} exact path={`/${item.id}`}>
-            <h1>Hello</h1>
-            <p>{item.id}</p>
+            <Drawer classData={item} />
           </Route>
         ))}
         <IsUserRedirect

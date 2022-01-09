@@ -137,6 +137,12 @@ const JoinClass = () => {
                 error={error}
                 helperText={error && "No class was found"}
               />
+              <TextField
+                id="outlined-basic"
+                className="joinClass__textField"
+                label="Student's ID"
+                variant="outlined"
+              />
             </div>
           </div>
         </div>
