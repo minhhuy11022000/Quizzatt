@@ -16,6 +16,7 @@ const JoinClass = () => {
   const [classCode, setClassCode] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [joinedData, setJoinedData] = useState();
   const [classExists, setClassExists] = useState(false);
 
@@ -28,15 +29,20 @@ const JoinClass = () => {
       .doc(classCode)
       .get()
       .then((doc) => {
-        console.log(doc.owner.email);
-        if (doc.exists && (doc.owner !== loggedInUser.email)) {
+        console.log(doc.data().owner);
+        if (doc.exists && doc.data().owner !== loggedInUser.email) {
           setClassExists(true);
           setJoinedData(doc.data());
           setError(false);
         } else {
-          setError(true);
-          setClassExists(false);
-          return;
+          if (doc.data().owner === loggedInUser.email) {
+            setEmailError(true);
+          } else {
+            setError(true);
+
+          }
+            setClassExists(false);
+            return;
         }
       });
 
@@ -68,7 +74,7 @@ const JoinClass = () => {
               className="joinClass__wrapper2"
               onClose={() => setJoinClassDialog(false)}
             >
-              <Close className="joinClass__svg" />
+              <Close onClick={() => setJoinClassDialog(false)} className="joinClass__svg" />
               <div className="joinClass__topHead">Join Class</div>
             </div>
             <Button
@@ -134,8 +140,8 @@ const JoinClass = () => {
                 variant="outlined"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                error={error}
-                helperText={error && "No class was found"}
+                error={emailError}
+                helperText={emailError && "You created this class so you cannot join this class."}
               />
               <TextField
                 id="outlined-basic"
